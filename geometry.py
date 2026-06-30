@@ -145,6 +145,82 @@ def draw_utility_corridor(msp, cfg: Config) -> None:
              "TEXT", rotation=90)
 
 
+def draw_anchorage(msp, cfg: Config) -> None:
+    """Designated anchorage area in the open sea, west of the breakwaters."""
+    lay = cfg.layout
+    wx0 = lay.water_bounds[0]
+    cy = lay.channel_cy
+    # Place the anchorage north-west of the channel mouth, well clear of the approach.
+    ax = wx0 + 400
+    ay = cy + 600
+    aw, ah = 800.0, 600.0
+    pts = rectangle(ax, ay, aw, ah)
+    add_polyline(msp, pts, "WATER", close=True)
+    add_text(msp, "DESIGNATED ANCHORAGE AREA",
+             (ax + aw / 2, ay + ah - 60), cfg.style.text_label, "WATER")
+    add_text(msp, "(+) ANCHOR SYMBOL",
+             (ax + aw / 2, ay + ah / 2), cfg.style.text_small, "WATER")
+    add_text(msp, "DEPTH: NATURAL SEABED",
+             (ax + aw / 2, ay + 60), cfg.style.text_small, "WATER")
+    log.info("Anchorage area drawn")
+
+
+def draw_admin_building(msp, cfg: Config) -> None:
+    """Port Authority / Admin building near the main gate."""
+    lay = cfg.layout
+    x0, y0, x1, y1 = lay.land_bounds
+    s = cfg.roads.fence_setback
+    gate_y = (y0 + s + y1 - s) / 2
+    # Building east of the spine road, near the main gate.
+    bx = x1 - s - 440
+    by = gate_y - 120
+    bw, bh = 260.0, 180.0
+    pts = rectangle(bx, by, bw, bh)
+    add_polyline(msp, pts, "FACILITIES")
+    add_solid_hatch(msp, pts, layer="HATCH", rgb=(220, 210, 190), transparency=0.3)
+    # Building cross-hatch
+    add_line(msp, (bx, by), (bx + bw, by + bh), "FACILITIES")
+    add_line(msp, (bx + bw, by), (bx, by + bh), "FACILITIES")
+    add_text(msp, "PORT AUTHORITY", (bx + bw / 2, by + bh - 30),
+             cfg.style.text_small, "FACILITIES")
+    add_text(msp, "ADMIN BUILDING", (bx + bw / 2, by + bh / 2),
+             cfg.style.text_small, "FACILITIES")
+    log.info("Admin building drawn")
+
+
+def draw_fire_station(msp, cfg: Config) -> None:
+    """Fire station near the oil terminal for emergency response."""
+    oil = cfg.parcel("OIL")
+    # Place just east (inland) of the oil terminal upper boundary.
+    fx = oil.x + oil.w + 140
+    fy = oil.y + oil.h - 200
+    fw, fh = 160.0, 140.0
+    pts = rectangle(fx, fy, fw, fh)
+    add_polyline(msp, pts, "FACILITIES")
+    add_solid_hatch(msp, pts, layer="HATCH", rgb=(236, 200, 200), transparency=0.3)
+    add_text(msp, "FIRE STATION", (fx + fw / 2, fy + fh / 2 + 20),
+             cfg.style.text_small, "FACILITIES")
+    add_text(msp, "[!] EMERGENCY", (fx + fw / 2, fy + fh / 2 - 20),
+             cfg.style.text_small, "FACILITIES")
+    log.info("Fire station drawn")
+
+
+def draw_mosque(msp, cfg: Config) -> None:
+    """Mosque and staff amenities block near the ecosystem zone."""
+    eco = cfg.parcel("ECOSYSTEM")
+    mx = eco.x + eco.w - 220
+    my = eco.y + 60
+    mw, mh = 140.0, 120.0
+    pts = rectangle(mx, my, mw, mh)
+    add_polyline(msp, pts, "FACILITIES")
+    add_solid_hatch(msp, pts, layer="HATCH", rgb=(220, 220, 235), transparency=0.3)
+    add_text(msp, "MOSQUE &", (mx + mw / 2, my + mh / 2 + 20),
+             cfg.style.text_small, "FACILITIES")
+    add_text(msp, "AMENITIES", (mx + mw / 2, my + mh / 2 - 20),
+             cfg.style.text_small, "FACILITIES")
+    log.info("Mosque & amenities drawn")
+
+
 def _ceil_to(value: float, step: float) -> float:
     import math
     return math.ceil(value / step) * step
@@ -158,3 +234,8 @@ def draw_all(msp, cfg: Config) -> None:
     draw_coordinate_grid(msp, cfg)
     draw_security_fence(msp, cfg)
     draw_utility_corridor(msp, cfg)
+    draw_anchorage(msp, cfg)
+    draw_admin_building(msp, cfg)
+    draw_fire_station(msp, cfg)
+    draw_mosque(msp, cfg)
+

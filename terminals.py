@@ -26,6 +26,7 @@ _TINT = {
     "CONTAINER": "container", "PASSENGER": "passenger", "GEN_CARGO": "gen_cargo",
     "RORO": "roro", "OIL": "oil", "LIQUID_BULK": "tank", "DRY_BULK": "silo",
     "DRY_DOCK": "generic", "REPAIR": "generic", "EXPANSION": "expansion",
+    "ECOSYSTEM": "ecosystem",
 }
 
 
@@ -196,11 +197,92 @@ def draw_dry_dock(msp, cfg: Config) -> None:
     add_line(msp, (dx, dy), (dx + dock_w, dy), "QUAYS")
 
 
+# ----------------------------------------------------------------------------
+# Ecosystem zone (landscaped greenspace with tree symbols)
+# ----------------------------------------------------------------------------
+def draw_ecosystem_zone(msp, cfg: Config) -> None:
+    """Ecosystem zone with tree symbols, sub-zone labels and landscape fill."""
+    p = cfg.parcel("ECOSYSTEM")
+    _draw_parcel_outline(msp, p, cfg)
+
+    # Green landscape fill.
+    pts = rectangle(p.x + 20, p.y + 20, p.w - 40, p.h - 40)
+    add_solid_hatch(msp, pts, layer="HATCH", rgb=_tint(p), transparency=0.30)
+
+    # Tree symbols: grid of small circles.
+    tree_r = 12.0
+    spacing_x = 80.0
+    spacing_y = 80.0
+    margin = 60.0
+    tx = p.x + margin
+    while tx < p.x + p.w - margin:
+        ty = p.y + margin
+        while ty < p.y + p.h - margin:
+            add_circle(msp, (tx, ty), tree_r, "TERMINALS")
+            add_circle(msp, (tx, ty), tree_r * 0.4, "TERMINALS")
+            ty += spacing_y
+        tx += spacing_x
+
+    # Sub-zone labels.
+    add_text(msp, "LANDSCAPED BUFFER ZONE",
+             (p.x + p.w / 2, p.y + p.h * 0.75),
+             cfg.style.text_small, "TERMINALS")
+    add_text(msp, "STORMWATER RETENTION",
+             (p.x + p.w / 2, p.y + p.h * 0.25),
+             cfg.style.text_small, "TERMINALS")
+    # Dashed line separating sub-zones.
+    mid_y = p.y + p.h / 2
+    add_line(msp, (p.x + 40, mid_y), (p.x + p.w - 40, mid_y),
+             "TERMINALS", linetype="DASHED2")
+    # Access road stub.
+    add_line(msp, (p.x + p.w, mid_y), (p.x + p.w + 30, mid_y), "ROADS")
+    log.info("Ecosystem zone drawn with %d tree symbols",
+             int(((p.w - 2 * margin) / spacing_x + 1) *
+                 ((p.h - 2 * margin) / spacing_y + 1)))
+
+
+# ----------------------------------------------------------------------------
+# Container stacking blocks (detail inside container terminal)
+# ----------------------------------------------------------------------------
+def draw_container_blocks(msp, cfg: Config) -> None:
+    """Draw evenly-spaced container stacking block rectangles in the container
+    terminal yard area to give realistic yard detail."""
+    p = cfg.parcel("CONTAINER")
+    apron = cfg.roads.quay_apron_setback
+    inner_x = p.x + apron + 30
+    inner_w = p.w - apron - 90
+    yard_h = p.h * 0.6
+    yard_y = p.y + 40
+
+    if inner_w <= 60:
+        return
+
+    # Container blocks: narrow horizontal rectangles stacked vertically.
+    block_w = inner_w * 0.85
+    block_h = 30.0
+    block_spacing = 55.0
+    bx = inner_x + (inner_w - block_w) / 2
+    by = yard_y + 30
+    n = 0
+    while by + block_h < yard_y + yard_h - 30:
+        block_pts = rectangle(bx, by, block_w, block_h)
+        add_polyline(msp, block_pts, "TERMINALS")
+        n += 1
+        by += block_spacing
+
+    add_text(msp, f"{n} CONTAINER BLOCKS",
+             (inner_x + inner_w / 2, yard_y + yard_h + 30),
+             cfg.style.text_small, "TERMINALS")
+    log.info("Container blocks: %d stacking blocks drawn", n)
+
+
 def draw_all(msp, cfg: Config) -> None:
     waterfront = {"CONTAINER", "PASSENGER", "GEN_CARGO", "RORO", "OIL"}
     for p in cfg.parcels:
         if p.key in waterfront:
             draw_waterfront_terminal(msp, p, cfg)
+        elif p.key == "ECOSYSTEM":
+            draw_ecosystem_zone(msp, cfg)
         elif p.key in {"EXPANSION", "REPAIR"}:
             draw_inland_terminal(msp, p, cfg)
         # LIQUID_BULK / DRY_BULK / DRY_DOCK only get their parcel outline here;
@@ -215,3 +297,5 @@ def draw_all(msp, cfg: Config) -> None:
     draw_dry_dock(msp, cfg)
     draw_tank_farm(msp, cfg)
     draw_silo_field(msp, cfg)
+    draw_container_blocks(msp, cfg)
+

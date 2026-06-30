@@ -39,10 +39,30 @@ W50 = rho_s·H^3 / (Kd·(Sr-1)^3·cot(alpha))
 | **Median armour mass W50** | **7.6 t** |
 | Crest level | +7.0 m CD |
 
+## 3a. Navigation Aids & Operations
+
+| Feature | Description |
+|---|---|
+| North breakwater light | FL.G 5s (green, starboard — IALA Region A) |
+| South breakwater light | FL.R 5s (red, port — IALA Region A) |
+| Pilot boarding station | 400 m seaward of channel mouth |
+| Tug basin | 180×200 m service craft basin adjacent to turning basin |
+| Anchorage area | 800×600 m designated anchorage NW of channel |
+
 ## 4. Storage
 
 - Liquid bulk: **5 tanks**, Ø30 m, 45 m centres, bunded.
 - Dry bulk: **10 silos**, Ø10 m.
+- Container yard: **10 stacking blocks** in the container terminal.
+
+## 4a. Port Facilities
+
+| Facility | Description |
+|---|---|
+| Port Authority / Admin Building | 260×180 m building near main gate |
+| Fire Station | 160×140 m emergency response facility near oil terminal |
+| Mosque & Amenities | 140×120 m staff welfare facility in ecosystem zone |
+| Ecosystem Zone / Greenspace | 760×600 m landscaped buffer with stormwater retention |
 
 ## 5. Engineering Assumptions
 
@@ -52,17 +72,21 @@ W50 = rho_s·H^3 / (Kd·(Sr-1)^3·cot(alpha))
 - Turning basin Ø = 1.5·LOA (tug-assisted) per PIANC/ROM.
 - Breakwater armour sized by Hudson with Kd for rough quarry stone, breaking waves, trunk section.
 - Tank spacing follows a 1.5·diameter fire-separation rule of thumb.
+- Navigation lights follow IALA Maritime Buoyage System Region A.
+- Berth length validated at ≥ 1.1·LOA per PIANC mooring guidelines.
 
 ## 6. Validation Results
 
 | Check | Result | Detail |
 |---|---|---|
 | Layer table | PASS | all layers present |
-| Geometry present | PASS | 296 entities in model space |
+| Geometry present | PASS | 451 entities in model space |
 | Tank spacing | PASS | centre spacing 45.0 m (min 45.0 m) |
 | Channel width | PASS | width 224 m vs PIANC min 160 m (7.0·B) |
 | Turning basin diameter | PASS | Ø 375 m vs min 300 m (1.50·LOA) |
 | Parcel overlap | PASS | no overlaps |
+| Berth length | FAIL | short berths: ['GEN_CARGO(230m)'] vs min 275 m |
+| Entrance gap | PASS | gap 314 m ≥ channel width 224 m |
 
 ## 7. Generated Files
 

@@ -58,8 +58,8 @@ def draw_breakwaters_plan(msp, cfg: Config) -> None:
     gap = cfg.nav.channel_width + 90.0          # entrance gap > channel width
     width = 75.0                                # mound footprint in plan [m]
     x_root = x_mouth + 180.0                    # moles root just inside the mouth
-    north_len = 1450.0                          # longer (cf. west mole, Port Said)
-    south_len = 950.0
+    north_len = cfg.bw.north_length             # longer (cf. west mole, Port Said)
+    south_len = cfg.bw.south_length
 
     # North mole (longer).
     n_inner = cy + gap / 2.0
@@ -79,8 +79,21 @@ def draw_breakwaters_plan(msp, cfg: Config) -> None:
 
     add_text(msp, f"ENTRANCE GAP {gap:.0f} m", (x_root + 60, cy),
              cfg.style.text_small, "BREAKWATER", align="MIDDLE_LEFT")
+
+    # Navigation lights on roundheads (IALA Region A: green=starboard/N, red=port/S).
+    _nav_light(msp, n_head, "FL.G 5s", 3, cfg)   # green starboard
+    _nav_light(msp, s_head, "FL.R 5s", 1, cfg)   # red port
     log.info("Breakwater moles drawn (N=%.0f m, S=%.0f m, gap=%.0f m)",
              north_len, south_len, gap)
+
+
+def _nav_light(msp, center, label: str, color: int, cfg: Config) -> None:
+    """Draw a navigation light marker (filled circle + characteristic label)."""
+    r = 18.0
+    add_circle(msp, center, r, "BREAKWATER")
+    add_circle(msp, center, r * 0.4, "BREAKWATER")
+    add_text(msp, label, (center[0], center[1] - r - 30),
+             cfg.style.text_small, "BREAKWATER")
 
 
 def draw_breakwater_section(msp, cfg: Config) -> None:

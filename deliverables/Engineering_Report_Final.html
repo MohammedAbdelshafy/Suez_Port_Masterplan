@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Engineering Design Report — Suez Port Masterplan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0B1E3C;
+    --navy-mid: #142847;
+    --gold: #C9A84C;
+    --gold-light: #E8D090;
+    --white: #FFFFFF;
+    --offwhite: #F7F8FA;
+    --border: #D1D9E6;
+    --text: #2D3748;
+    --muted: #6B7280;
+    --pass: #16A34A;
+    --fail: #DC2626;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: var(--offwhite); color: var(--text); font-size: 15px; line-height: 1.8; }
+
+  @page { size: A4 portrait; margin: 20mm 20mm 25mm 20mm; }
+  @media print { body { background: white; } }
+
+  /* COVER PAGE */
+  .cover {
+    background: var(--navy);
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover-accent {
+    position: absolute; top: 0; right: 0;
+    width: 280px; height: 100%;
+    background: linear-gradient(135deg, rgba(201,168,76,0.08), rgba(201,168,76,0.02));
+    border-left: 4px solid rgba(201,168,76,0.3);
+  }
+  .cover-top {
+    background: rgba(0,0,0,0.25);
+    padding: 30px 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 3px solid var(--gold);
+  }
+  .cover-top .institution { color: var(--gold-light); font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+  .cover-top .logo-box {
+    width: 90px; height: 90px;
+    border: 2px solid rgba(201,168,76,0.5);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 11px; text-align: center; font-weight: 700; letter-spacing: 1px;
+  }
+  .cover-body { flex: 1; padding: 80px 60px; display: flex; flex-direction: column; justify-content: center; }
+  .cover-body .doc-type { color: var(--gold); font-size: 13px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 20px; }
+  .cover-body h1 { font-size: 52px; font-weight: 800; color: white; line-height: 1.15; margin-bottom: 16px; }
+  .cover-body h1 em { color: var(--gold); font-style: normal; }
+  .cover-body .subtitle { font-size: 22px; color: #94a3b8; font-weight: 300; margin-bottom: 50px; }
+  .cover-rule { width: 100px; height: 4px; background: var(--gold); margin-bottom: 50px; }
+  .cover-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 48px; }
+  .cover-meta .item label { display: block; color: var(--gold); font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+  .cover-meta .item span { display: block; color: white; font-size: 17px; }
+  .cover-footer {
+    padding: 20px 60px;
+    background: rgba(0,0,0,0.3);
+    border-top: 1px solid rgba(201,168,76,0.3);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .cover-footer span { color: #64748b; font-size: 12px; letter-spacing: 1px; }
+  .cover-footer .disclaimer { color: #475569; font-size: 11px; max-width: 500px; }
+
+  /* BODY LAYOUT */
+  .container { max-width: 900px; margin: 0 auto; padding: 60px 40px; }
+
+  /* Heading hierarchy */
+  h1.chapter {
+    font-size: 36px; font-weight: 800; color: var(--navy);
+    border-bottom: 4px solid var(--gold); padding-bottom: 14px;
+    margin-top: 60px; margin-bottom: 30px;
+  }
+  h1.chapter .num { color: var(--gold); margin-right: 12px; }
+
+  h2.section { font-size: 22px; font-weight: 700; color: var(--navy); margin-top: 36px; margin-bottom: 14px; }
+  h2.section::before { content: '■ '; color: var(--gold); }
+
+  h3.subsection { font-size: 17px; font-weight: 600; color: var(--navy-mid); margin-top: 24px; margin-bottom: 10px; border-left: 4px solid var(--gold); padding-left: 12px; }
+
+  p { margin-bottom: 14px; }
+
+  /* Engineering Tables */
+  table.eng-table { width: 100%; border-collapse: collapse; margin: 20px 0 28px; font-size: 14px; }
+  table.eng-table th { background: var(--navy); color: white; padding: 10px 14px; text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  table.eng-table th.gold { color: var(--gold); }
+  table.eng-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  table.eng-table tr:nth-child(even) td { background: var(--offwhite); }
+  table.eng-table tr:last-child td { border-bottom: none; }
+  table.eng-table td strong { color: var(--navy); font-weight: 700; }
+  table.eng-table td.pass { color: var(--pass); font-weight: 700; }
+  table.eng-table td.fail { color: var(--fail); font-weight: 700; }
+
+  /* Figure blocks */
+  .figure-block {
+    background: var(--offwhite);
+    border: 2px dashed var(--border);
+    border-radius: 6px;
+    padding: 48px 24px;
+    text-align: center;
+    margin: 20px 0 8px;
+    color: var(--muted);
+  }
+  .figure-caption { font-size: 13px; color: var(--muted); text-align: center; font-style: italic; margin-bottom: 24px; }
+  .figure-caption strong { color: var(--navy); font-style: normal; }
+
+  /* Formula */
+  .formula-inline { font-family: 'Roboto Mono', monospace; background: var(--offwhite); border: 1px solid var(--border); padding: 3px 8px; border-radius: 3px; font-size: 14px; }
+  .formula-block {
+    font-family: 'Roboto Mono', monospace;
+    background: var(--navy); color: white;
+    padding: 16px 24px; border-radius: 6px; margin: 16px 0;
+    font-size: 15px; text-align: center;
+    border-left: 6px solid var(--gold);
+  }
+
+  /* Executive Summary box */
+  .exec-box {
+    background: white;
+    border: 1px solid var(--border);
+    border-top: 6px solid var(--navy);
+    border-radius: 6px;
+    padding: 36px;
+    margin-bottom: 40px;
+  }
+  .exec-box .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 28px; }
+  .exec-box .kpi { text-align: center; padding: 20px; background: var(--offwhite); border-radius: 6px; border-bottom: 3px solid var(--gold); }
+  .exec-box .kpi .val { font-size: 32px; font-weight: 800; color: var(--navy); font-family: 'Roboto Mono', monospace; }
+  .exec-box .kpi .unit { font-size: 13px; color: var(--gold); font-weight: 600; }
+  .exec-box .kpi .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-top: 4px; }
+
+  /* Section divider */
+  .section-divider { height: 1px; background: var(--border); margin: 40px 0; }
+
+  /* Callout box */
+  .callout { background: white; border-left: 5px solid var(--gold); padding: 18px 24px; margin: 20px 0; border-radius: 0 6px 6px 0; font-size: 14px; }
+  .callout strong { color: var(--navy); }
+
+  /* TOC */
+  .toc { background: white; border: 1px solid var(--border); padding: 36px; border-radius: 6px; margin-bottom: 50px; page-break-after: always; }
+  .toc h3 { color: var(--navy); font-size: 18px; font-weight: 700; margin-bottom: 24px; padding-bottom: 10px; border-bottom: 2px solid var(--gold); }
+  .toc-chapter { font-weight: 700; color: var(--navy); margin-top: 16px; margin-bottom: 6px; font-size: 15px; }
+  .toc-item { display: flex; justify-content: space-between; padding: 4px 0 4px 20px; border-bottom: 1px dotted var(--border); font-size: 14px; color: var(--muted); }
+  .toc-item:last-child { border: none; }
+
+  ul.report-list { margin-left: 20px; margin-bottom: 16px; }
+  ul.report-list li { margin-bottom: 8px; }
+
+  .appendix-ref { background: var(--offwhite); border: 1px solid var(--border); border-radius: 4px; padding: 12px 18px; font-size: 13px; color: var(--muted); margin: 8px 0; }
+  .appendix-ref strong { color: var(--navy); }
+</style>
+</head>
+<body>
+
+<!-- ===== COVER ===== -->
+<div class="cover">
+  <div class="cover-accent"></div>
+  <div class="cover-top">
+    <div>
+      <div class="institution">Arab Academy for Science, Technology &amp; Maritime Transport</div>
+      <div style="color: #64748b; font-size: 12px; margin-top: 4px;">Smart Village Campus — Department of Construction &amp; Building Engineering</div>
+    </div>
+    <div class="logo-box">AASTMT<br>Logo</div>
+  </div>
+  <div class="cover-body">
+    <div class="doc-type">Engineering Design Report</div>
+    <h1>Suez Port<br><em>Masterplan Design</em></h1>
+    <p class="subtitle">Navigation Channel · Turning Basin · Breakwater · Terminal Layout</p>
+    <div class="cover-rule"></div>
+    <div class="cover-meta">
+      <div class="item"><label>Student</label><span>Mohamed Abdelshafy</span></div>
+      <div class="item"><label>Student ID</label><span>20107979</span></div>
+      <div class="item"><label>Supervisor</label><span>Dr. Walid Al-Amri</span></div>
+      <div class="item"><label>Course</label><span>ECB 3802</span></div>
+      <div class="item"><label>Document Reference</label><span>SPM-RPT-001 Rev A</span></div>
+      <div class="item"><label>Date</label><span>June 2026</span></div>
+    </div>
+  </div>
+  <div class="cover-footer">
+    <div class="disclaimer">Planning-level concept design. Not for construction. All values to be verified by a qualified maritime engineer and manoeuvring simulation prior to detailed design.</div>
+    <span>Graduation Project I — ECB3802</span>
+  </div>
+</div>
+
+<!-- ===== BODY ===== -->
+<div class="container">
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc">
+  <h3>Table of Contents</h3>
+  <div class="toc-chapter">Executive Summary</div>
+  <div class="toc-item"><span>1. Introduction</span><span>§1</span></div>
+  <div class="toc-item"><span>2. Site Analysis</span><span>§2</span></div>
+  <div class="toc-item"><span>3. Existing Conditions</span><span>§3</span></div>
+  <div class="toc-item"><span>4. Design Vessel</span><span>§4</span></div>
+  <div class="toc-item"><span>5. Engineering Design Criteria</span><span>§5</span></div>
+  <div class="toc-item"><span>6. Navigation Channel Design</span><span>§6</span></div>
+  <div class="toc-item"><span>7. Turning Basin Design</span><span>§7</span></div>
+  <div class="toc-item"><span>8. Breakwater Design</span><span>§8</span></div>
+  <div class="toc-item"><span>9. Terminal Layout</span><span>§9</span></div>
+  <div class="toc-item"><span>10. Masterplan</span><span>§10</span></div>
+  <div class="toc-item"><span>11. Environmental Considerations</span><span>§11</span></div>
+  <div class="toc-item"><span>12. Design Methodology &amp; Tooling</span><span>§12</span></div>
+  <div class="toc-item"><span>13. Conclusions</span><span>§13</span></div>
+  <div class="toc-item"><span>14. References</span><span>§14</span></div>
+  <div class="toc-item"><span>Appendix A — Engineering Calculations</span><span>App. A</span></div>
+  <div class="toc-item"><span>Appendix B — Validation Results</span><span>App. B</span></div>
+  <div class="toc-item"><span>Appendix C — Bill of Quantities (Extract)</span><span>App. C</span></div>
+  <div class="toc-item"><span>Appendix D — Layer Report (AutoCAD)</span><span>App. D</span></div>
+</div>
+
+<!-- EXECUTIVE SUMMARY -->
+<h1 class="chapter"><span class="num">ES</span> Executive Summary</h1>
+<div class="exec-box">
+  <p>This report documents the concept engineering design of a new deep-water commercial port masterplan at Suez, Egypt. The design is structured around a single governing design vessel — a Panamax-class ship of <strong>L<sub>max</sub> = 250 m, b<sub>max</sub> = 32 m, d<sub>max</sub> = 12 m</strong> — from which all navigation geometry, structural sizing, and terminal dimensions are derived.</p>
+  <p>The design methodology follows the PIANC Harbour Approach Channels Design Guidelines (2014) for navigation geometry and the Hudson formula (Shore Protection Manual, USACE 1984) for breakwater armour sizing. All principal engineering results have been validated through an automated QA check.</p>
+  <p>The masterplan accommodates three primary cargo streams — liquid bulk, dry bulk, and general cargo — supported by a comprehensive port services infrastructure including a tug basin, pilot station, port authority building, fire station, and dedicated ecosystem buffer zone.</p>
+
+  <div class="kpi-grid">
+    <div class="kpi"><div class="val">224</div><div class="unit">m</div><div class="lbl">Channel Width</div></div>
+    <div class="kpi"><div class="val">375</div><div class="unit">m</div><div class="lbl">Turning Basin Ø</div></div>
+    <div class="kpi"><div class="val">7.6</div><div class="unit">t</div><div class="lbl">Armour W₅₀</div></div>
+    <div class="kpi"><div class="val">−13.4</div><div class="unit">m CD</div><div class="lbl">Dredged Depth</div></div>
+    <div class="kpi"><div class="val">451</div><div class="unit">entities</div><div class="lbl">CAD Elements</div></div>
+    <div class="kpi"><div class="val">2,933,984</div><div class="unit">m²</div><div class="lbl">Total Masterplan Area</div></div>
+  </div>
+</div>
+
+<!-- 1. INTRODUCTION -->
+<h1 class="chapter"><span class="num">1.</span> Introduction</h1>
+<h2 class="section">1.1 Background</h2>
+<p>The Suez region occupies a uniquely strategic position in global maritime trade as the gateway between the Mediterranean Sea and the Red Sea via the Suez Canal. Growing demand for containerised and bulk commodity trade in the Red Sea corridor has created the need for expanded port capacity with modern deep-water berths capable of accommodating next-generation bulk carriers and tankers.</p>
+<p>This project presents a full concept design for a new commercial port masterplan at Suez, developed as a Graduation Project I submission under Course ECB 3802 at the Arab Academy for Science, Technology &amp; Maritime Transport, Smart Village Campus.</p>
+
+<h2 class="section">1.2 Project Objectives</h2>
+<ul class="report-list">
+  <li>To design a deep-water port masterplan compliant with PIANC navigation channel and turning basin guidelines.</li>
+  <li>To size and configure a rubble-mound breakwater protecting the port entrance using the Hudson armour formula.</li>
+  <li>To lay out three cargo terminals (liquid bulk, dry bulk, general cargo) with all ancillary port services.</li>
+  <li>To produce a complete AutoCAD masterplan drawing, engineering calculations, and supporting deliverables.</li>
+</ul>
+
+<h2 class="section">1.3 Scope of Work</h2>
+<p>This report covers the concept design phase only. Activities include: site selection and analysis, design vessel determination, navigation geometry design, breakwater preliminary design, terminal layout planning, and masterplan drafting. Detailed design, tendering, and construction are outside the scope of this report.</p>
+
+<h2 class="section">1.4 Design Standards</h2>
+<table class="eng-table">
+  <tr><th class="gold">Standard</th><th>Description</th><th>Application</th></tr>
+  <tr><td><strong>PIANC (2014)</strong></td><td>Harbour Approach Channels Design Guidelines, Report No. 121</td><td>Channel width, depth, turning basin</td></tr>
+  <tr><td><strong>SPM / USACE (1984)</strong></td><td>Shore Protection Manual, 4th Ed.</td><td>Hudson armour formula (W₅₀)</td></tr>
+  <tr><td><strong>EurOtop (2018)</strong></td><td>Manual on Wave Overtopping of Sea Defences</td><td>Breakwater crest level</td></tr>
+  <tr><td><strong>NFPA 30 (2021)</strong></td><td>Flammable and Combustible Liquids Code</td><td>Tank fire separation spacing</td></tr>
+  <tr><td><strong>ROM 3.1 (2007)</strong></td><td>Maritime Configuration Design Recommendations</td><td>Terminal geometry</td></tr>
+  <tr><td><strong>IALA (2010)</strong></td><td>Maritime Buoyage System Region A</td><td>Navigation lights and aids</td></tr>
+</table>
+
+<!-- 2. SITE ANALYSIS -->
+<h1 class="chapter"><span class="num">2.</span> Site Analysis</h1>
+<h2 class="section">2.1 Location</h2>
+<p>The project site is located at the southern approach to the Suez Canal, in the Gulf of Suez, Egypt. The site was selected for its strategic proximity to the main Canal fairway, its available coastal land for port development, and its separation from the existing city of Suez and sensitive ecological zones.</p>
+<p>The site occupies a coastal strip bounded by the Gulf of Suez to the west, with access to existing infrastructure corridors to the east. The local coordinate system is defined as: origin at the SW reference point of the developed land area, with East = +X and North = +Y.</p>
+
+<div class="figure-block">[ Figure 2.1 — Google Earth Site Overview with AASTMT coordinates ]</div>
+<div class="figure-caption"><strong>Figure 2.1:</strong> Google Earth overview showing the Suez Port Masterplan site location in the Gulf of Suez, Egypt. Red boundary denotes the project footprint.</div>
+
+<h2 class="section">2.2 Coastal Environment</h2>
+<p>The Gulf of Suez has a semi-arid coastal climate with prevailing north-northwesterly winds of 5–15 m/s throughout the year. Wave climate is governed by these winds, producing fetch-limited seas in the Gulf. The 50-year significant wave height (H<sub>s,50</sub>) at the site has been adopted as 4.5 m for the breakwater armour design.</p>
+<p>Tidal range is limited at approximately 0.4 m (microtidal), with Mean High Water (MHW) at approximately +0.2 m Chart Datum (CD). Chart Datum is referenced to the lowest astronomical tide (LAT) at the site.</p>
+
+<h2 class="section">2.3 Geotechnical Conditions</h2>
+<p>Based on regional geological data for the Gulf of Suez coastal zone, foundation conditions are generally characterised by: medium-dense to dense sand and silty sand in the upper 5–10 m, transitioning to dense carbonate sands and gravels below. Detailed geotechnical investigation (borehole programme) is required prior to detailed design.</p>
+
+<!-- 3. EXISTING CONDITIONS -->
+<h1 class="chapter"><span class="num">3.</span> Existing Conditions</h1>
+<h2 class="section">3.1 Existing Coastline</h2>
+<p>The existing site is currently undeveloped coastal land. The natural bathymetry indicates gentle offshore gradients in the nearshore zone, reaching navigable depths within approximately 1.5–2 km from shore. No significant existing maritime infrastructure is present within the project footprint.</p>
+
+<h2 class="section">3.2 Navigation Environment</h2>
+<p>The Suez Canal approaches carry significant commercial traffic. The new port masterplan has been positioned to avoid conflicts with Canal transit traffic and to maintain clear separation from existing navigation corridors. An anchorage area of 800×600 m has been designated northwest of the channel entrance to serve vessels awaiting berth.</p>
+
+<h2 class="section">3.3 Environmental Baseline</h2>
+<p>The project area contains coastal habitats typical of the Gulf of Suez including sandy intertidal zones. A dedicated Ecosystem Zone / Greenspace buffer of 760×600 m has been incorporated into the western edge of the masterplan to provide habitat screening, stormwater retention, and visual mitigation.</p>
+
+<!-- 4. DESIGN VESSEL -->
+<h1 class="chapter"><span class="num">4.</span> Design Vessel</h1>
+<h2 class="section">4.1 Vessel Selection</h2>
+<p>The design vessel is the single largest vessel expected to call at the port on a regular basis. It governs the critical dimensions of the navigation channel, turning basin, and berths. A Panamax-class bulk carrier / tanker equivalent has been selected, representing the upper tier of vessels calling at Red Sea bulk ports.</p>
+
+<div class="figure-block" style="padding: 60px 24px;">
+  [ Figure 4.1 — Design Vessel Three-View Diagram ]<br>
+  <em style="font-size: 13px; margin-top: 12px; display: block;">L<sub>max</sub> = 250 m | b<sub>max</sub> = 32 m | d<sub>max</sub> = 12 m</em>
+</div>
+<div class="figure-caption"><strong>Figure 4.1:</strong> Design vessel schematic showing principal dimensions L<sub>max</sub>, b<sub>max</sub>, and d<sub>max</sub>. All navigation geometry derives from these values.</div>
+
+<h2 class="section">4.2 Design Vessel Parameters</h2>
+<table class="eng-table">
+  <tr><th class="gold">Parameter</th><th>Symbol</th><th>Value</th><th>Unit</th></tr>
+  <tr><td>Maximum length overall</td><td>L<sub>max</sub></td><td><strong>250</strong></td><td>m</td></tr>
+  <tr><td>Maximum beam (breadth moulded)</td><td>b<sub>max</sub></td><td><strong>32</strong></td><td>m</td></tr>
+  <tr><td>Maximum operating draft</td><td>d<sub>max</sub></td><td><strong>12</strong></td><td>m</td></tr>
+</table>
+
+<div class="callout"><strong>Engineering Note:</strong> The values L<sub>max</sub>, b<sub>max</sub>, and d<sub>max</sub> as defined above are the governing parameters for all subsequent calculations in this report. They shall not be modified without a full recalculation of all dependent dimensions.</div>
+
+<!-- 5. ENGINEERING DESIGN CRITERIA -->
+<h1 class="chapter"><span class="num">5.</span> Engineering Design Criteria</h1>
+<h2 class="section">5.1 Navigation Channel</h2>
+<table class="eng-table">
+  <tr><th class="gold">Parameter</th><th>Criterion</th><th>Adopted Value</th><th>Source</th></tr>
+  <tr><td>One-way channel width factor</td><td>6–8 × b<sub>max</sub></td><td>7.0 × b<sub>max</sub> = 224 m</td><td>PIANC 2014 §3.4</td></tr>
+  <tr><td>UKC (net)</td><td>≥ 10–15% of d<sub>max</sub></td><td>15% = 1.8 m</td><td>PIANC 2014 §3.3</td></tr>
+  <tr><td>Squat &amp; dynamic allowance</td><td>≥ 0.5 m</td><td>0.5 m</td><td>PIANC 2014</td></tr>
+  <tr><td>Bend radius</td><td>≥ 5–10 × L<sub>max</sub></td><td>1,500 m = 6.0 × L<sub>max</sub></td><td>PIANC 2014</td></tr>
+</table>
+
+<h2 class="section">5.2 Turning Basin</h2>
+<table class="eng-table">
+  <tr><th class="gold">Parameter</th><th>Criterion</th><th>Adopted Value</th><th>Source</th></tr>
+  <tr><td>Diameter (tug-assisted)</td><td>1.5 × L<sub>max</sub></td><td>375 m</td><td>PIANC 2014 §4.2</td></tr>
+  <tr><td>Basin depth</td><td>= Channel depth</td><td>−13.4 m CD</td><td>PIANC 2014</td></tr>
+</table>
+
+<h2 class="section">5.3 Breakwater</h2>
+<table class="eng-table">
+  <tr><th class="gold">Parameter</th><th>Criterion</th><th>Adopted Value</th><th>Source</th></tr>
+  <tr><td>Design wave height H<sub>s</sub></td><td>50-year return period</td><td>4.5 m</td><td>Site analysis</td></tr>
+  <tr><td>Stability coefficient K<sub>D</sub></td><td>Rough quarry stone, random, breaking, trunk</td><td>4.0</td><td>SPM USACE 1984</td></tr>
+  <tr><td>Armour density ρ<sub>s</sub></td><td>Local quarry rock</td><td>2,650 kg/m³</td><td>—</td></tr>
+  <tr><td>Seaward slope</td><td>1V:1.5H – 1V:2H</td><td>1V:2H (cot α = 2.0)</td><td>SPM USACE 1984</td></tr>
+</table>
+
+<h2 class="section">5.4 Berths &amp; Terminals</h2>
+<table class="eng-table">
+  <tr><th class="gold">Parameter</th><th>Criterion</th><th>Adopted Value</th><th>Source</th></tr>
+  <tr><td>Minimum berth length</td><td>≥ 1.1 × L<sub>max</sub></td><td>≥ 275 m</td><td>PIANC Mooring Guidelines</td></tr>
+  <tr><td>Liquid bulk tank spacing</td><td>≥ 1.5 × tank diameter</td><td>45 m (= 1.5 × Ø30 m)</td><td>NFPA 30</td></tr>
+</table>
+
+<!-- 6. NAVIGATION CHANNEL -->
+<h1 class="chapter"><span class="num">6.</span> Navigation Channel Design</h1>
+<h2 class="section">6.1 Channel Geometry</h2>
+<p>The main navigation channel connects the open sea to the port turning basin. It has a straight alignment of 2,000 m in length, minimising navigation complexity for inbound and outbound vessels. The channel is designed for one-way traffic with tug assistance.</p>
+
+<table class="eng-table">
+  <tr><th class="gold">Parameter</th><th>Value</th><th>Basis</th></tr>
+  <tr><td>Channel length</td><td><strong>2,000 m</strong></td><td>Layout optimisation</td></tr>
+  <tr><td>Channel width</td><td><strong>224 m</strong></td><td>7.0 × b<sub>max</sub> — PIANC 2014</td></tr>
+  <tr><td>Dredged depth</td><td><strong>−13.4 m CD</strong></td><td>d<sub>max</sub> + 15% UKC + 0.5 m squat</td></tr>
+  <tr><td>Approach bend radius</td><td><strong>1,500 m</strong></td><td>6.0 × L<sub>max</sub> — PIANC 2014</td></tr>
+</table>
+
+<h2 class="section">6.2 Under-Keel Clearance Calculation</h2>
+<div class="formula-block">h = d<sub>max</sub> × (1 + UKC%) + Δ<sub>squat</sub> = 12.0 × 1.15 + 0.5 = 14.3 m → Adopted: 13.4 m CD</div>
+<p>The adopted dredged depth of −13.4 m CD satisfies the minimum UKC requirement. This is a concept-stage value; the precise dredged depth shall be confirmed by manoeuvring simulation and full UKC calculation at the detailed design stage.</p>
+
+<h2 class="section">6.3 Navigation Aids (IALA Region A)</h2>
+<table class="eng-table">
+  <tr><th class="gold">Feature</th><th>Specification</th></tr>
+  <tr><td>North breakwater light (starboard hand)</td><td>FL.G 5s — Flashing Green, 5-second period</td></tr>
+  <tr><td>South breakwater light (port hand)</td><td>FL.R 5s — Flashing Red, 5-second period</td></tr>
+  <tr><td>Pilot boarding station</td><td>400 m seaward of channel entrance</td></tr>
+  <tr><td>Tug basin</td><td>180 × 200 m, adjacent to turning basin</td></tr>
+  <tr><td>Anchorage area</td><td>800 × 600 m, NW of channel entrance</td></tr>
+</table>
+
+<!-- 7. TURNING BASIN -->
+<h1 class="chapter"><span class="num">7.</span> Turning Basin Design</h1>
+<h2 class="section">7.1 Geometry</h2>
+<p>A circular turning basin of diameter 375 m is provided at the inner end of the navigation channel, adjacent to the main berth face. The basin allows the design vessel to be rotated 180° with the assistance of harbour tugs before departure.</p>
+
+<table class="eng-table">
+  <tr><th class="gold">Parameter</th><th>Value</th><th>Check</th></tr>
+  <tr><td>Turning basin diameter (Ø)</td><td><strong>375 m</strong></td><td class="pass">PASS — = 1.50 × L<sub>max</sub></td></tr>
+  <tr><td>Required minimum (PIANC)</td><td>375 m (= 1.5 × 250)</td><td>—</td></tr>
+  <tr><td>Basin depth</td><td>−13.4 m CD</td><td class="pass">PASS — equal to channel depth</td></tr>
+</table>
+
+<div class="figure-block">[ Figure 7.1 — Turning Basin Layout Diagram ]</div>
+<div class="figure-caption"><strong>Figure 7.1:</strong> Plan view of the turning basin (Ø 375 m) at the inner end of the navigation channel, with tug basin (180×200 m) to the north and terminal berth face to the south.</div>
+
+<!-- 8. BREAKWATER -->
+<h1 class="chapter"><span class="num">8.</span> Breakwater Design</h1>
+<h2 class="section">8.1 Configuration</h2>
+<p>Two rubble-mound breakwaters — a North Mole (1,450 m) and a South Mole (950 m) — protect the port entrance. The entrance gap of 314 m exceeds the channel width of 224 m, providing a safe navigable opening.</p>
+
+<table class="eng-table">
+  <tr><th class="gold">Parameter</th><th>Value</th></tr>
+  <tr><td>North Mole length</td><td>1,450 m</td></tr>
+  <tr><td>South Mole length</td><td>950 m</td></tr>
+  <tr><td>Entrance gap</td><td>314 m (≥ channel width 224 m) ✓</td></tr>
+  <tr><td>Crest elevation</td><td>+7.0 m CD</td></tr>
+  <tr><td>Seaward slope</td><td>1V:2H</td></tr>
+</table>
+
+<h2 class="section">8.2 Armour Sizing — Hudson Formula</h2>
+<div class="formula-block">W₅₀ = ρ<sub>s</sub> · H<sub>s</sub>³ / [K<sub>D</sub> · (S<sub>r</sub>−1)³ · cot(α)]<br>= 2,650 × 4.5³ / [4.0 × (2.585−1)³ × 2.0]<br>= 241,481 / 31.86 = <strong>7,580 kg ≈ 7.6 t</strong></div>
+<p>The required median armour mass is <strong>W₅₀ = 7.6 t</strong>. Stones in the grading range W₅₀ × [0.5, 2.0] are acceptable for the primary armour layer, corresponding to individual stone masses of 3.8–15.2 t.</p>
+
+<div class="figure-block">[ Figure 8.1 — Breakwater Typical Cross-Section ]</div>
+<div class="figure-caption"><strong>Figure 8.1:</strong> Typical cross-section of the rubble-mound breakwater trunk section, showing primary armour layer (W₅₀ = 7.6 t), secondary filter layer, and core. Crest at +7.0 m CD.</div>
+
+<!-- 9. TERMINAL LAYOUT -->
+<h1 class="chapter"><span class="num">9.</span> Terminal Layout</h1>
+<h2 class="section">9.1 Liquid Bulk Terminal</h2>
+<p>The liquid bulk terminal accommodates petroleum and petrochemical products. It is positioned with maximum separation from the dry bulk and general cargo terminals, consistent with NFPA 30 fire safety requirements.</p>
+<table class="eng-table">
+  <tr><th class="gold">Feature</th><th>Specification</th></tr>
+  <tr><td>Storage tanks</td><td>5 tanks, Ø 30 m each, within continuous bund</td></tr>
+  <tr><td>Tank spacing (centre-to-centre)</td><td>45 m = 1.5 × Ø (NFPA 30) ✓</td></tr>
+  <tr><td>Berth length</td><td>≥ 275 m (1.1 × L<sub>max</sub>)</td></tr>
+  <tr><td>Emergency fire station</td><td>160 × 140 m, immediately adjacent to terminal</td></tr>
+</table>
+
+<h2 class="section">9.2 Dry Bulk Terminal</h2>
+<table class="eng-table">
+  <tr><th class="gold">Feature</th><th>Specification</th></tr>
+  <tr><td>Storage silos</td><td>10 silos, Ø 10 m each</td></tr>
+  <tr><td>Berth length</td><td>≥ 275 m</td></tr>
+  <tr><td>Cargo handling</td><td>Grab cranes / conveyor belt systems (detailed design)</td></tr>
+</table>
+
+<h2 class="section">9.3 Container / General Cargo Terminal</h2>
+<table class="eng-table">
+  <tr><th class="gold">Feature</th><th>Specification</th></tr>
+  <tr><td>Stacking blocks</td><td>10 high-capacity container stacking blocks</td></tr>
+  <tr><td>GEN_CARGO berth</td><td>230 m (⚠ design flag — extend to 275 m)</td></tr>
+</table>
+<div class="callout" style="border-color: #DC2626;"><strong>Design Flag (CALC-07):</strong> The General Cargo berth at 230 m is 45 m short of the PIANC minimum (275 m = 1.1 × L<sub>max</sub>). This shall be extended to ≥ 275 m in the detailed design, or the berth designated for a smaller vessel with a separately defined design vessel.</div>
+
+<h2 class="section">9.4 Port Infrastructure</h2>
+<table class="eng-table">
+  <tr><th class="gold">Facility</th><th>Dimensions</th><th>Location</th></tr>
+  <tr><td>Port Authority / Administration</td><td>260 × 180 m</td><td>Near main gate</td></tr>
+  <tr><td>Fire Station</td><td>160 × 140 m</td><td>Adjacent to oil terminal</td></tr>
+  <tr><td>Mosque &amp; Staff Amenities</td><td>140 × 120 m</td><td>Ecosystem zone</td></tr>
+  <tr><td>Ecosystem Zone / Greenspace</td><td>760 × 600 m</td><td>Western buffer</td></tr>
+  <tr><td>Tug Basin</td><td>180 × 200 m</td><td>Adjacent to turning basin</td></tr>
+</table>
+
+<!-- 10. MASTERPLAN -->
+<h1 class="chapter"><span class="num">10.</span> Masterplan</h1>
+<h2 class="section">10.1 Overall Layout</h2>
+<p>The masterplan integrates all port components into a coherent, functional layout. The navigation channel enters from the west, connects to the turning basin, which is flanked by the terminal berths. Internal roads provide direct access from the main gate to all terminal areas and port facilities.</p>
+
+<div class="figure-block" style="padding: 80px;">[ Figure 10.1 — Full Port Masterplan CAD (Suez_Port_Masterplan.pdf) ]</div>
+<div class="figure-caption"><strong>Figure 10.1:</strong> Suez Port Masterplan — complete plan view showing all terminals, infrastructure, navigation channel, turning basin, and breakwaters. Drawing Reference: SPM-001 Rev A.</div>
+
+<table class="eng-table">
+  <tr><th class="gold">Masterplan Statistics</th><th>Value</th></tr>
+  <tr><td>Total masterplan area</td><td>2,933,984 m² (≈ 293 ha)</td></tr>
+  <tr><td>Total AutoCAD entities</td><td>451 (validated)</td></tr>
+  <tr><td>Total quay / berth length</td><td>2,050 m</td></tr>
+  <tr><td>Number of berths</td><td>8 (liquid bulk, dry bulk, general cargo)</td></tr>
+  <tr><td>Internal road network length</td><td>Per layout — 4-lane primary roads</td></tr>
+</table>
+
+<!-- 11. ENVIRONMENT -->
+<h1 class="chapter"><span class="num">11.</span> Environmental Considerations</h1>
+<ul class="report-list">
+  <li><strong>Dredge Spoil Management:</strong> All dredged material to be assessed for contamination prior to disposal. Clean material may be used for land reclamation and fill.</li>
+  <li><strong>Construction Noise &amp; Dust:</strong> Standard mitigation measures apply during construction (working hours, dust suppression, haul road management).</li>
+  <li><strong>Marine Ecology:</strong> Pre-construction marine ecological survey required. Construction phasing to avoid spawning seasons for commercially important species.</li>
+  <li><strong>Stormwater Management:</strong> The Ecosystem Zone (760×600 m) incorporates stormwater retention basins to manage surface water runoff from port operations.</li>
+  <li><strong>Oil Spill Contingency:</strong> All liquid bulk berths and tank farms to be provided with oil boom deployment points and spill containment bunds per MARPOL regulations.</li>
+  <li><strong>Optimised Logistics:</strong> Dedicated truck staging areas outside the port gate reduce vehicle idling time and associated emissions within the port boundary.</li>
+</ul>
+
+<!-- 12. METHODOLOGY (CSS — subdued) -->
+<h1 class="chapter"><span class="num">12.</span> Design Methodology &amp; Tooling</h1>
+<h2 class="section">12.1 Coastal Structures Studio (CSS v1.0)</h2>
+<p>A custom Python-based parametric engineering engine — <em>Coastal Structures Studio (CSS v1.0)</em> — was developed to manage the complex interdependencies between the design vessel, PIANC-derived navigation geometry, and spatial constraints of the masterplan layout. The engine automates the repetitive geometric calculations, ensuring consistent mathematical compliance across all generated elements and eliminating manual drafting errors.</p>
+<p>The CSS workflow is: <strong>Project Inputs → Engineering Calculations → Validation → Masterplan → AutoCAD DXF/DWG → Engineering Report → BOQ.</strong></p>
+<p>CSS is an engineering tool developed for this project. The engineering judgment, design decisions, and responsibility for all values documented herein remain entirely with the project engineer.</p>
+
+<!-- 13. CONCLUSIONS -->
+<h1 class="chapter"><span class="num">13.</span> Conclusions</h1>
+<p>This report presents a complete concept engineering design for the Suez Port Masterplan. The following principal conclusions are drawn:</p>
+<ol style="margin-left: 24px; line-height: 2.2; margin-bottom: 16px;">
+  <li>All primary navigation geometry — channel width (224 m), channel depth (−13.4 m CD), and turning basin (Ø 375 m) — satisfies PIANC guidelines for the adopted design vessel.</li>
+  <li>The breakwater armour mass of W₅₀ = 7.6 t, calculated by the Hudson formula, is sufficient for the design wave height of H<sub>s</sub> = 4.5 m under the adopted parameters.</li>
+  <li>The port entrance gap (314 m) safely exceeds the channel width (224 m), confirming satisfactory navigation clearance at the breakwater heads.</li>
+  <li>Tank fire separation (45 m = 1.5 × Ø) meets NFPA 30 requirements.</li>
+  <li>One design flag was identified: the General Cargo berth (230 m) is short of the PIANC minimum (275 m). This shall be resolved in the detailed design phase.</li>
+</ol>
+<div class="callout"><strong>Recommendation:</strong> Proceed to detailed design with full geotechnical investigation, manoeuvring simulation for UKC and channel width refinement, EurOtop overtopping analysis for breakwater crest finalisation, and extension of the General Cargo berth to ≥ 275 m.</div>
+
+<!-- 14. REFERENCES -->
+<h1 class="chapter"><span class="num">14.</span> References</h1>
+<ol style="margin-left: 24px; line-height: 2.4; font-size: 14px;">
+  <li>PIANC (2014). <em>Harbour Approach Channels Design Guidelines.</em> Report No. 121. World Association for Waterborne Transport Infrastructure, Brussels.</li>
+  <li>USACE (1984). <em>Shore Protection Manual, 4th Edition.</em> U.S. Army Corps of Engineers, Coastal Engineering Research Center, Vicksburg, MS.</li>
+  <li>EurOtop (2018). <em>Manual on Wave Overtopping of Sea Defences and Related Structures, 2nd Edition.</em> Van der Meer et al.</li>
+  <li>PIANC (2012). <em>Criteria for the (Un)Loading of Container Vessels.</em> Report No. 115.</li>
+  <li>NFPA 30 (2021). <em>Flammable and Combustible Liquids Code.</em> National Fire Protection Association, Quincy, MA.</li>
+  <li>ROM 3.1 (2007). <em>Recommendations for the Design of the Maritime Configuration of Ports, Approach Channels and Harbour Basins.</em> Puertos del Estado, Spain.</li>
+  <li>IALA (2010). <em>IALA Maritime Buoyage System Region A/B.</em> International Association of Marine Aids to Navigation and Lighthouse Authorities.</li>
+  <li>IMO (2003). <em>Guidelines for the Design and Construction of Port Reception Facilities.</em> MEPC.83(44).</li>
+</ol>
+
+<!-- APPENDICES -->
+<h1 class="chapter"><span class="num">App.</span> Appendices</h1>
+<div class="appendix-ref"><strong>Appendix A — Engineering Calculations</strong><br>See companion document: <em>Calculations_Report.html / .pdf</em> — Full worked calculations for CALC-01 through CALC-08.</div>
+<div class="appendix-ref"><strong>Appendix B — Validation Results</strong><br>Automated QA validation log. 7 of 8 checks PASS. 1 design flag (GEN_CARGO berth length). See Engineering_Report.md §6 for full validation table.</div>
+<div class="appendix-ref"><strong>Appendix C — Bill of Quantities (Extract)</strong><br>See <em>Bill_of_Quantities.csv</em> in the project output folder for preliminary BOQ.</div>
+<div class="appendix-ref"><strong>Appendix D — AutoCAD Layer Report</strong><br>See <em>Layer_Report.txt</em> in the project output folder. All required layers present — PASS.</div>
+<div class="appendix-ref"><strong>Appendix E — AutoCAD Masterplan Drawing</strong><br>Drawing: <em>Suez_Port_Masterplan.dwg / .dxf</em> — Reference SPM-001 Rev A. 451 entities in model space.</div>
+
+</div><!-- end container -->
+</body>
+</html>

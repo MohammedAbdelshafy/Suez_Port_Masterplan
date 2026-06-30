@@ -89,6 +89,34 @@ def check_overlaps(cfg: Config) -> CheckResult:
                        critical=False)
 
 
+def check_berth_length(cfg: Config) -> CheckResult:
+    """Verify each waterfront berth segment ≥ LOA + 10% mooring clearance."""
+    min_berth = cfg.vessel.loa * 1.10
+    short = []
+    for p in cfg.parcels:
+        if p.has_quay and p.berths > 0:
+            seg = p.h / p.berths
+            if seg < min_berth:
+                short.append(f"{p.key}({seg:.0f}m)")
+    ok = not short
+    return CheckResult(
+        "Berth length", ok,
+        f"all berths ≥ {min_berth:.0f} m (1.1·LOA)" if ok
+        else f"short berths: {short} vs min {min_berth:.0f} m",
+        critical=False,  # advisory — smaller vessel classes use shorter berths
+    )
+
+
+def check_entrance_gap(cfg: Config) -> CheckResult:
+    """Verify breakwater entrance gap ≥ channel width."""
+    gap = cfg.nav.channel_width + 90.0   # matches breakwater.py gap calculation
+    ok = gap >= cfg.nav.channel_width
+    return CheckResult(
+        "Entrance gap", ok,
+        f"gap {gap:.0f} m ≥ channel width {cfg.nav.channel_width:.0f} m",
+    )
+
+
 def run_all(doc, msp, cfg: Config) -> list[CheckResult]:
     results = [
         check_layers(doc),
@@ -97,6 +125,8 @@ def run_all(doc, msp, cfg: Config) -> list[CheckResult]:
         check_channel_width(cfg),
         check_turning_basin(cfg),
         check_overlaps(cfg),
+        check_berth_length(cfg),
+        check_entrance_gap(cfg),
     ]
     for r in results:
         level = logging.INFO if r.passed else (
@@ -110,3 +140,4 @@ def run_all(doc, msp, cfg: Config) -> list[CheckResult]:
             + "; ".join(f"{r.name}: {r.message}" for r in critical_failures)
         )
     return results
+

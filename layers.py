@@ -45,6 +45,7 @@ LAYERS: list[LayerDef] = [
     LayerDef("ROADS",        9,  20, "CONTINUOUS", 0.0, "Internal road network"),
     LayerDef("TANKS",        20, 35, "CONTINUOUS", 0.0, "Liquid bulk tanks"),
     LayerDef("SILOS",        40, 35, "CONTINUOUS", 0.0, "Dry bulk silos"),
+    LayerDef("FACILITIES",   50, 25, "CONTINUOUS", 0.0, "Buildings & port facilities"),
     LayerDef("DIMENSIONS",   1,  18, "CONTINUOUS", 0.0, "Dimension lines"),
     LayerDef("CENTERLINES",  4,  13, "CENTER2",    0.0, "Centrelines"),
     LayerDef("TEXT",         7,  18, "CONTINUOUS", 0.0, "General annotation text"),

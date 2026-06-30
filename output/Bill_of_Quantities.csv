@@ -2,12 +2,20 @@ Item,Unit,Quantity
 Dredging (channel + basin),m3,7488769.0
 Navigation channel area,m2,448000.0
 Turning basin area,m2,110447.0
+Tug basin area,m2,36000.0
+Anchorage area,m2,480000.0
 Reclaimed land area,m2,14190000.0
 Quay wall length (total),m,2980.0
 Berths (count),no,9
-Breakwater length (2 arms),m,1400
+Breakwater length (2 arms),m,2400.0
+Navigation lights,no,2
 Storage tanks,no,5
 Tank diameter,m,30.0
 Silos,no,10
 Silo diameter,m,10.0
 Armour stone unit (Hudson W50),t,7.6
+Admin building footprint,m2,46800.0
+Fire station footprint,m2,22400.0
+Mosque & amenities footprint,m2,16800.0
+Ecosystem / greenspace area,m2,456000.0
+Roundabouts,no,2

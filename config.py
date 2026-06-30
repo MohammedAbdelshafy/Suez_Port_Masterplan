@@ -92,6 +92,8 @@ class BreakwaterInputs:
     crest_level: float = 7.0           # +m CD
     seabed_level: float = -15.0        # m CD (design depth at head)
     crest_width: float = 8.0           # [m]
+    north_length: float = 1450.0       # [m] N (west) mole, longer (cf. Port Said)
+    south_length: float = 950.0        # [m] S (east) mole, shorter
     seaward_slope: float = 2.0         # cot(alpha) seaward (2H:1V)
     leeward_slope: float = 1.5         # cot(alpha) leeward (1.5H:1V)
     armour_thickness: float = 4.0      # [m] (two layers of rock/units)
@@ -234,6 +236,8 @@ def build_parcels(layout: Layout) -> list[Parcel]:
                inland_x, 950.0, 420.0, 600.0, color=140),
         Parcel("REPAIR", "REPAIR YARD",
                inland_x + 480.0, 950.0, 280.0, 600.0, color=140),
+        Parcel("ECOSYSTEM", "ECOSYSTEM ZONE / GREENSPACE",
+               inland_x, 300.0, 760.0, 600.0, color=75),
         Parcel("EXPANSION", "FUTURE EXPANSION AREA",
                inland_x + 900.0, 300.0, 1180.0, 3100.0, color=251),
     ]
@@ -284,6 +288,7 @@ PALETTE: dict[str, tuple[int, int, int]] = {
     "tank":       (236, 214, 200),
     "silo":       (226, 224, 200),
     "expansion":  (240, 238, 230),
+    "ecosystem":  (180, 225, 180),
     "generic":    (224, 224, 224),
 }
 

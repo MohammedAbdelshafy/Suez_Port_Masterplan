@@ -59,7 +59,7 @@ def _draw_titleblock(layout, cfg: Config, x, y, w, h) -> None:
 
 def _draw_legend(layout, cfg: Config, x, y, h) -> None:
     show = ["WATER", "LAND", "BREAKWATER", "CHANNEL", "TURNING_BASIN",
-            "QUAYS", "BERTHS", "TERMINALS", "TANKS", "SILOS", "ROADS"]
+            "QUAYS", "BERTHS", "TERMINALS", "TANKS", "SILOS", "FACILITIES", "ROADS"]
     sw = h * 0.05
     layout.add_text("LEGEND", dxfattribs={"layer": "LEGEND", "height": sw * 1.4}
                     ).set_placement((x, y + len(show) * sw * 1.4 + sw))

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suez Port Masterplan - A1 Board</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        deepnavy: '#051121',
+                        steelblue: '#1a365d',
+                        cyanaccent: '#00e5ff',
+                        lightbg: '#f8fafc',
+                        bordergray: '#e2e8f0'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Exact A1 Landscape Dimensions */
+        @page {
+            size: A1 landscape;
+            margin: 0;
+        }
+        body {
+            width: 841mm;
+            height: 594mm;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            box-sizing: border-box;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            color: #1e293b;
+            position: relative;
+        }
+        
+        /* Map Background */
+        .map-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #e2e8f0; /* Fallback */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 0;
+        }
+        
+        .map-placeholder-text {
+            font-size: 48px;
+            font-weight: 800;
+            color: #94a3b8;
+            border: 4px dashed #cbd5e1;
+            padding: 100px;
+            border-radius: 20px;
+        }
+
+        /* Overlay Elements */
+        .overlay-element {
+            position: absolute;
+            z-index: 10;
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid #051121;
+        }
+
+        /* Title Block */
+        .title-block {
+            bottom: 40px;
+            right: 40px;
+            width: 500px;
+            padding: 30px;
+            border-bottom: 10px solid #00e5ff;
+        }
+
+        .title-block h1 {
+            font-size: 36px;
+            font-weight: 800;
+            color: #051121;
+            text-transform: uppercase;
+            line-height: 1.1;
+            margin-bottom: 12px;
+        }
+
+        .title-block .subtitle {
+            font-size: 18px;
+            color: #1a365d;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 24px;
+        }
+
+        .title-block .meta {
+            font-size: 16px;
+            color: #475569;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .title-block .meta span:last-child {
+            font-weight: 700;
+            color: #051121;
+        }
+
+        /* Legend */
+        .legend-block {
+            top: 40px;
+            left: 40px;
+            width: 350px;
+            padding: 24px;
+            border-left: 6px solid #00e5ff;
+        }
+        
+        .legend-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #051121;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            letter-spacing: 0.05em;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .legend-color {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            border: 1px solid #cbd5e1;
+        }
+
+        /* Key Metrics Box */
+        .metrics-block {
+            top: 40px;
+            right: 40px;
+            width: 400px;
+            padding: 24px;
+            border-left: 6px solid #1a365d;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+        
+        .metric-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .metric-label {
+            font-size: 16px;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-size: 18px;
+            color: #051121;
+            font-weight: 800;
+        }
+
+        /* North Arrow / Scale Bar */
+        .nav-block {
+            bottom: 40px;
+            left: 40px;
+            display: flex;
+            align-items: flex-end;
+            gap: 40px;
+            background: none;
+            box-shadow: none;
+            border: none;
+        }
+        
+        .north-arrow {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(255,255,255,0.9);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #051121;
+            font-weight: 900;
+            font-size: 24px;
+            color: #051121;
+        }
+        .north-arrow::before {
+            content: "▲";
+            color: #00e5ff;
+            font-size: 32px;
+            margin-bottom: -10px;
+        }
+
+        .scale-bar {
+            background-color: rgba(255,255,255,0.9);
+            padding: 10px 20px;
+            border: 2px solid #051121;
+        }
+        .scale-graphic {
+            width: 200px;
+            height: 10px;
+            display: flex;
+            border: 1px solid #000;
+        }
+        .scale-segment {
+            flex: 1;
+            background-color: #000;
+        }
+        .scale-segment:nth-child(even) {
+            background-color: #fff;
+        }
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <!-- Main Map Background -->
+    <div class="map-bg">
+        <div class="map-placeholder-text text-center">
+            [ INSERT LARGE GOOGLE EARTH + CAD OVERLAY HERE ]<br>
+            <span class="text-2xl mt-4 block font-normal">Ensure 300 DPI, correct orientation, and clear layer distinction.</span>
+        </div>
+    </div>
+
+    <!-- Title Block -->
+    <div class="overlay-element title-block">
+        <h1>Suez Port Masterplan</h1>
+        <div class="subtitle">General Arrangement & Marine Infrastructure</div>
+        
+        <div class="meta">
+            <span>Project:</span>
+            <span>Graduation Project I</span>
+        </div>
+        <div class="meta">
+            <span>Engineer:</span>
+            <span>Mohamed Abdelshafy (20107979)</span>
+        </div>
+        <div class="meta">
+            <span>Supervisor:</span>
+            <span>Dr. Walid Al-Amri (ECB3802)</span>
+        </div>
+        <div class="meta">
+            <span>Institution:</span>
+            <span>AASTMT Smart Village</span>
+        </div>
+        <div class="meta mt-4 pt-4 border-t border-slate-200">
+            <span>Date:</span>
+            <span>May 2026</span>
+        </div>
+        <div class="meta">
+            <span>Scale:</span>
+            <span>AS SHOWN (A1)</span>
+        </div>
+        <div class="meta">
+            <span>Drawing No:</span>
+            <span>MP-01</span>
+        </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="overlay-element legend-block">
+        <div class="legend-title">Legend</div>
+        
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: rgba(0, 229, 255, 0.3); border-color: #00e5ff;"></div>
+            <span>Dredged Area (-14.1m CD)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #475569;"></div>
+            <span>Rubble Mound Breakwater</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #f59e0b;"></div>
+            <span>Liquid Bulk Terminal</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #8b5cf6;"></div>
+            <span>Dry Bulk Terminal</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #10b981;"></div>
+            <span>Container Terminal</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #ef4444;"></div>
+            <span>Port Administration / Buildings</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #84cc16;"></div>
+            <span>Environmental / Buffer Zone</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #3b82f6;"></div>
+            <span>Future Expansion Area</span>
+        </div>
+    </div>
+
+    <!-- Key Metrics Box -->
+    <div class="overlay-element metrics-block">
+        <div class="legend-title">Key Engineering Metrics</div>
+        
+        <div class="metric-row">
+            <span class="metric-label">Design Vessel (LOA)</span>
+            <span class="metric-value">250 m</span>
+        </div>
+        <div class="metric-row">
+            <span class="metric-label">Channel Width</span>
+            <span class="metric-value">224 m</span>
+        </div>
+        <div class="metric-row">
+            <span class="metric-label">Turning Basin Ø</span>
+            <span class="metric-value">375 m</span>
+        </div>
+        <div class="metric-row">
+            <span class="metric-label">Entrance Gap</span>
+            <span class="metric-value">314 m</span>
+        </div>
+        <div class="metric-row">
+            <span class="metric-label">North Mole Length</span>
+            <span class="metric-value">1,450 m</span>
+        </div>
+        <div class="metric-row">
+            <span class="metric-label">South Mole Length</span>
+            <span class="metric-value">950 m</span>
+        </div>
+        <div class="metric-row">
+            <span class="metric-label">Total Quay Length</span>
+            <span class="metric-value">2,050 m</span>
+        </div>
+        <div class="metric-row">
+            <span class="metric-label">Reclaimed Area</span>
+            <span class="metric-value">2,933,984 m²</span>
+        </div>
+    </div>
+
+    <!-- North Arrow & Scale Bar -->
+    <div class="overlay-element nav-block">
+        <div class="north-arrow">
+            N
+        </div>
+        <div class="scale-bar">
+            <div class="text-xs font-bold text-slate-500 mb-1 uppercase tracking-widest text-center">Scale</div>
+            <div class="scale-graphic">
+                <div class="scale-segment"></div>
+                <div class="scale-segment"></div>
+                <div class="scale-segment"></div>
+                <div class="scale-segment"></div>
+            </div>
+            <div class="scale-labels">
+                <span>0</span>
+                <span>200</span>
+                <span>400m</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

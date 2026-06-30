@@ -13,6 +13,7 @@ TERMINALS            8            25  CONTINUOUS       0%  Terminal parcels
 ROADS                9            20  CONTINUOUS       0%  Internal road network
 TANKS               20            35  CONTINUOUS       0%  Liquid bulk tanks
 SILOS               40            35  CONTINUOUS       0%  Dry bulk silos
+FACILITIES          50            25  CONTINUOUS       0%  Buildings & port facilities
 DIMENSIONS           1            18  CONTINUOUS       0%  Dimension lines
 CENTERLINES          4            13     CENTER2       0%  Centrelines
 TEXT                 7            18  CONTINUOUS       0%  General annotation text
@@ -21,4 +22,4 @@ GRID                 8             9     DASHED2      80%  Coordinate grid
 LEGEND               7            18  CONTINUOUS       0%  Legend block
 TITLEBLOCK           7            50  CONTINUOUS       0%  Title block & border
 ============================================================
-Total layers: 19
+Total layers: 20

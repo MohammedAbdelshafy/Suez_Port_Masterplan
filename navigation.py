@@ -119,8 +119,49 @@ def _circle_poly(center, radius, segments: int = 72):
             for i in range(segments)]
 
 
+def draw_pilot_station(msp, cfg: Config) -> None:
+    """Pilot boarding station marker at the seaward end of the approach channel."""
+    lay = cfg.layout
+    cy = lay.channel_cy
+    x_mouth = lay.channel_mouth_x
+    # Place the pilot station 400 m seaward of the channel mouth.
+    px = x_mouth - 400
+    py = cy
+    r = 35.0
+    add_circle(msp, (px, py), r, "CHANNEL")
+    # Cross marker
+    add_line(msp, (px - r * 0.7, py), (px + r * 0.7, py), "CHANNEL")
+    add_line(msp, (px, py - r * 0.7), (px, py + r * 0.7), "CHANNEL")
+    add_text(msp, "PILOT BOARDING", (px, py + r + 40),
+             cfg.style.text_small, "CHANNEL")
+    add_text(msp, "STATION", (px, py + r + 10),
+             cfg.style.text_small, "CHANNEL")
+    log.info("Pilot boarding station drawn")
+
+
+def draw_tug_basin(msp, cfg: Config) -> None:
+    """Small tug / service craft basin on the quay side of the turning basin."""
+    lay = cfg.layout
+    c = lay.basin_center
+    r = lay.basin_radius
+    # Place tug basin east of the turning basin, against the quay wall.
+    tx = lay.quay_line_x - 20
+    ty = c[1] - r + 40
+    tw, th = 180.0, 200.0
+    pts = [(tx, ty), (tx + tw, ty), (tx + tw, ty + th), (tx, ty + th)]
+    add_polyline(msp, pts, "TURNING_BASIN")
+    add_solid_hatch(msp, pts, layer="TURNING_BASIN", rgb=PALETTE["channel"],
+                    transparency=0.25)
+    add_mtext(msp, "TUG BASIN\\PSERVICE CRAFT",
+              (tx + tw / 2, ty + th / 2), cfg.style.text_small, "TURNING_BASIN")
+    log.info("Tug basin drawn")
+
+
 def draw_all(msp, cfg: Config) -> None:
     draw_channel(msp, cfg)
     draw_approach_alignment(msp, cfg)
     draw_turning_basin(msp, cfg)
     draw_safe_clearance(msp, cfg)
+    draw_pilot_station(msp, cfg)
+    draw_tug_basin(msp, cfg)
+

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suez Port Masterplan - A0 Poster</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        deepnavy: '#051121',
+                        steelblue: '#1a365d',
+                        cyanaccent: '#00e5ff',
+                        lightbg: '#f8fafc',
+                        bordergray: '#e2e8f0'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Exact A0 Portrait Dimensions */
+        @page {
+            size: A0 portrait;
+            margin: 0;
+        }
+        body {
+            width: 841mm;
+            height: 1189mm;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            box-sizing: border-box;
+            /* Scale factor for viewing on screen vs print */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            color: #1e293b;
+        }
+        
+        /* Section styling */
+        .poster-section {
+            padding: 30px;
+            border: 2px solid #e2e8f0;
+            background-color: #ffffff;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: #051121;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 24px;
+            border-left: 8px solid #00e5ff;
+            padding-left: 16px;
+            line-height: 1.1;
+        }
+
+        .text-body {
+            font-size: 20px;
+            line-height: 1.6;
+            color: #334155;
+        }
+        
+        .list-item {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: baseline;
+        }
+        
+        .list-item::before {
+            content: '■';
+            color: #00e5ff;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        /* Engineering Tables */
+        .eng-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 18px;
+        }
+        .eng-table th {
+            background-color: #f1f5f9;
+            color: #051121;
+            font-weight: 700;
+            text-align: left;
+            padding: 14px 16px;
+            border-bottom: 3px solid #1a365d;
+        }
+        .eng-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .eng-table tr:last-child td {
+            border-bottom: none;
+        }
+        .eng-table td strong {
+            color: #051121;
+        }
+
+        /* Image placeholders */
+        .img-placeholder {
+            background-color: #f1f5f9;
+            border: 2px dashed #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-weight: 600;
+            font-size: 24px;
+            width: 100%;
+            margin-top: 20px;
+            flex-grow: 1;
+        }
+        
+        /* Grid Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 20px;
+            padding: 30px 40px;
+            flex-grow: 1;
+            background-color: #f8fafc;
+        }
+        
+        .span-2-cols { grid-column: span 2; }
+        .span-3-cols { grid-column: span 3; }
+        .span-2-rows { grid-row: span 2; }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="bg-deepnavy text-white px-10 py-12 flex justify-between items-center border-b-[12px] border-cyanaccent shrink-0">
+        <div class="flex-1">
+            <h2 class="text-3xl font-light text-slate-300 tracking-wider mb-2">ARAB ACADEMY FOR SCIENCE, TECHNOLOGY & MARITIME TRANSPORT</h2>
+            <h1 class="text-7xl font-extrabold uppercase tracking-tight mb-4">Suez Port Masterplan Design</h1>
+            <div class="flex space-x-12 mt-6">
+                <div>
+                    <p class="text-sm text-cyanaccent font-bold uppercase tracking-widest mb-1">Graduation Project I</p>
+                    <p class="text-2xl">Mohamed Abdelshafy</p>
+                    <p class="text-slate-400 text-lg">ID: 20107979</p>
+                </div>
+                <div>
+                    <p class="text-sm text-cyanaccent font-bold uppercase tracking-widest mb-1">Supervisor</p>
+                    <p class="text-2xl">Dr. Walid Al-Amri</p>
+                    <p class="text-slate-400 text-lg">ECB3802</p>
+                </div>
+            </div>
+        </div>
+        <div class="w-64 h-64 bg-white rounded-full flex items-center justify-center shrink-0">
+            <span class="text-deepnavy font-bold text-2xl text-center">University<br>Logo</span>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="main-grid">
+        
+        <!-- ROW 1 -->
+        <!-- Objectives -->
+        <div class="poster-section">
+            <h3 class="section-title">Objectives</h3>
+            <p class="text-body mb-4">
+                To design a state-of-the-art, parametric deep-water port masterplan at Suez, integrating advanced maritime engineering principles, automated CAD generation, and sustainable infrastructure to support the next generation of global shipping.
+            </p>
+            <p class="text-body italic text-slate-500 border-l-4 border-slate-300 pl-4 mt-auto">
+                Planning-level concept design. Verified against PIANC guidelines.
+            </p>
+        </div>
+
+        <!-- Site Location -->
+        <div class="poster-section span-2-cols">
+            <h3 class="section-title">Site Location & Context</h3>
+            <div class="flex gap-6 h-full">
+                <div class="flex-1">
+                    <p class="text-body">
+                        Located at the strategic southern approach to the Suez Canal, Egypt. The site presents unique coastal morphology constraints, bounded by existing maritime traffic corridors to the east and environmental preservation zones.
+                    </p>
+                    <div class="mt-6">
+                        <div class="list-item"><span class="text-body"><strong>Coordinate System:</strong> Local Grid (E = +X, N = +Y)</span></div>
+                        <div class="list-item"><span class="text-body"><strong>Datum:</strong> Chart Datum (CD)</span></div>
+                        <div class="list-item"><span class="text-body"><strong>Total Reclaimed Area:</strong> 2,933,984 m²</span></div>
+                    </div>
+                </div>
+                <div class="flex-1 img-placeholder rounded-lg bg-slate-100 border-slate-300" style="margin-top: 0;">
+                    [ Insert Google Earth Overview Map ]
+                </div>
+            </div>
+        </div>
+
+        <!-- ROW 2 -->
+        <!-- Design Vessel & Engineering -->
+        <div class="poster-section span-2-cols">
+            <h3 class="section-title">Design Vessel & Engineering Criteria</h3>
+            <div class="flex gap-8 h-full">
+                <div class="flex-1 flex flex-col">
+                    <div class="img-placeholder rounded bg-slate-50" style="margin-top: 0; min-height: 200px;">
+                        [ Insert Ship Graphic: Lmax, bmax, dmax ]
+                    </div>
+                    <table class="eng-table mt-4">
+                        <tr>
+                            <th>Vessel Parameter</th>
+                            <th>Value</th>
+                        </tr>
+                        <tr>
+                            <td>Length Overall (LOA)</td>
+                            <td><strong>250 m</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Beam (bmax)</td>
+                            <td><strong>32 m</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Draft (dmax)</td>
+                            <td><strong>12 m</strong></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="flex-1 flex flex-col justify-end">
+                    <table class="eng-table">
+                        <tr>
+                            <th>Engineering Parameter</th>
+                            <th>Value</th>
+                            <th>Standard / Basis</th>
+                        </tr>
+                        <tr>
+                            <td>Dredged Depth</td>
+                            <td><strong>-14.1 m CD</strong></td>
+                            <td>PIANC (Draft + 15% UKC + Squat)</td>
+                        </tr>
+                        <tr>
+                            <td>Design Wave (Hs)</td>
+                            <td><strong>5.2 m</strong></td>
+                            <td>Statistical Extreme</td>
+                        </tr>
+                        <tr>
+                            <td>Rock Density</td>
+                            <td><strong>2600 kg/m³</strong></td>
+                            <td>Local Quarry Standard</td>
+                        </tr>
+                        <tr>
+                            <td>Armour Slope</td>
+                            <td><strong>1:1.5</strong></td>
+                            <td>Hudson Equation</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Breakwater -->
+        <div class="poster-section">
+            <h3 class="section-title">Breakwater Design</h3>
+            <div class="text-body mb-4">
+                <p class="font-mono text-sm bg-slate-100 p-3 rounded text-steelblue font-bold mb-4">W50 = ρ_s · H³ / (Kd · (S_r - 1)³ · cot(α))</p>
+                <div class="list-item"><strong>North Mole:</strong> 1,450 m</div>
+                <div class="list-item"><strong>South Mole:</strong> 950 m</div>
+                <div class="list-item"><strong>Entrance Gap:</strong> 314 m</div>
+                <div class="list-item"><strong>Armour Sizing:</strong> W50 = 7.6 t (Hudson)</div>
+                <div class="list-item"><strong>Crest Elevation:</strong> +4.0 m CD</div>
+            </div>
+            <div class="img-placeholder rounded" style="min-height: 150px;">
+                [ Insert Breakwater Cross-Section ]
+            </div>
+        </div>
+
+        <!-- ROW 3 -->
+        <!-- Navigation -->
+        <div class="poster-section">
+            <h3 class="section-title">Navigation & Operations</h3>
+            <div class="list-item"><span class="text-body"><strong>Channel Length:</strong> 2,000 m</span></div>
+            <div class="list-item"><span class="text-body"><strong>Channel Width:</strong> 224 m (7.0 × Beam)</span></div>
+            <div class="list-item"><span class="text-body"><strong>Turning Basin Ø:</strong> 375 m (1.5 × LOA)</span></div>
+            <div class="list-item"><span class="text-body"><strong>Pilot Station:</strong> 400 m seaward of mouth</span></div>
+            
+            <h4 class="font-bold text-xl text-deepnavy mt-6 mb-2">Navigational Aids (IALA Region A)</h4>
+            <div class="list-item"><span class="text-body"><strong>North Breakwater:</strong> FL.G 5s (Starboard)</span></div>
+            <div class="list-item"><span class="text-body"><strong>South Breakwater:</strong> FL.R 5s (Port)</span></div>
+            
+            <div class="img-placeholder rounded mt-4" style="min-height: 120px;">
+                [ Insert Turning Basin Diagram ]
+            </div>
+        </div>
+
+        <!-- Terminal Layout & Facilities -->
+        <div class="poster-section span-2-cols">
+            <h3 class="section-title">Terminal Layout & Port Facilities</h3>
+            <div class="flex gap-8 h-full">
+                <div class="flex-1">
+                    <h4 class="font-bold text-xl text-deepnavy mb-4 border-b-2 border-slate-200 pb-2">Storage & Cargo Handling</h4>
+                    <div class="list-item"><span class="text-body"><strong>Liquid Bulk:</strong> 5 tanks (Ø 30 m), 45m spacing, fully bunded.</span></div>
+                    <div class="list-item"><span class="text-body"><strong>Dry Bulk:</strong> 10 silos (Ø 20 m).</span></div>
+                    <div class="list-item"><span class="text-body"><strong>Container Terminal:</strong> 10 high-capacity stacking blocks.</span></div>
+                    <div class="list-item"><span class="text-body"><strong>Berths:</strong> Validated at ≥ 275 m (1.1 × LOA). Total 8 berths.</span></div>
+                    <div class="list-item"><span class="text-body"><strong>Total Quay Length:</strong> 2,050 m.</span></div>
+                </div>
+                <div class="flex-1">
+                    <h4 class="font-bold text-xl text-deepnavy mb-4 border-b-2 border-slate-200 pb-2">Critical Port Infrastructure</h4>
+                    <div class="list-item"><span class="text-body"><strong>Port Authority / Admin:</strong> 260×180 m complex near main gate.</span></div>
+                    <div class="list-item"><span class="text-body"><strong>Fire Station:</strong> 160×140 m facility adjacent to oil terminal.</span></div>
+                    <div class="list-item"><span class="text-body"><strong>Mosque & Amenities:</strong> 140×120 m staff welfare facility.</span></div>
+                    <div class="list-item"><span class="text-body"><strong>Ecosystem Zone:</strong> 60,000+ m² landscaped buffer with 63 mature trees and stormwater retention.</span></div>
+                    <div class="list-item"><span class="text-body"><strong>Tug Basin:</strong> 180×200 m adjacent to turning basin.</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ROW 4 -->
+        <!-- CSS Platform (Subdued Methodology Section) -->
+        <div class="poster-section">
+            <h3 class="section-title">Design Methodology & Tooling</h3>
+            <p class="text-body font-bold mb-2">Coastal Structures Studio (CSS v1.0)</p>
+            <p class="text-body mb-4">
+                To manage the complex parametric relationships between vessel dimensions, PIANC guidelines, and spatial constraints, a custom Python-based engineering engine was developed for this project.
+            </p>
+            <div class="list-item"><span class="text-body"><strong>Workflow:</strong> Vessel Inputs → PIANC Calculations → DXF Generation → BOQ</span></div>
+            <div class="list-item"><span class="text-body"><strong>Advantage:</strong> Ensures rigorous mathematical compliance for all geometries.</span></div>
+        </div>
+
+        <!-- Future Work -->
+        <div class="poster-section bg-steelblue text-white border-none">
+            <h3 class="section-title" style="color: white; border-color: #00e5ff;">Future Work</h3>
+            <ul class="mt-4 space-y-4">
+                <li class="flex items-center text-xl text-slate-200"><span class="text-cyanaccent mr-3">■</span> Digital Twin Integration</li>
+                <li class="flex items-center text-xl text-slate-200"><span class="text-cyanaccent mr-3">■</span> BIM (Building Information Modeling)</li>
+                <li class="flex items-center text-xl text-slate-200"><span class="text-cyanaccent mr-3">■</span> GIS Spatial Analytics</li>
+                <li class="flex items-center text-xl text-slate-200"><span class="text-cyanaccent mr-3">■</span> Predictive Maintenance AI</li>
+            </ul>
+        </div>
+        
+        <!-- Validation / Results Box -->
+        <div class="poster-section relative">
+            <h3 class="section-title">System Validation</h3>
+            <table class="eng-table mt-2 text-sm">
+                <tr>
+                    <td>Geometry Generation</td>
+                    <td><strong class="text-green-600">PASS</strong> (451 entities)</td>
+                </tr>
+                <tr>
+                    <td>Channel Width (PIANC)</td>
+                    <td><strong class="text-green-600">PASS</strong> (224m)</td>
+                </tr>
+                <tr>
+                    <td>Turning Basin (1.5LOA)</td>
+                    <td><strong class="text-green-600">PASS</strong> (375m)</td>
+                </tr>
+                <tr>
+                    <td>Entrance Gap</td>
+                    <td><strong class="text-green-600">PASS</strong> (314m)</td>
+                </tr>
+            </table>
+            
+            <!-- QR Code -->
+            <div class="absolute bottom-6 right-6 text-center">
+                <div class="w-24 h-24 bg-slate-200 border-2 border-slate-800 flex items-center justify-center mb-2">
+                    <span class="text-xs text-slate-500 font-bold">QR CODE</span>
+                </div>
+                <p class="text-xs font-bold uppercase tracking-wider text-deepnavy">Project Demo</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-deepnavy text-cyanaccent px-10 py-6 flex justify-between items-center text-sm tracking-widest uppercase font-bold shrink-0">
+        <div>Arab Academy for Science, Technology & Maritime Transport</div>
+        <div>Department of Construction & Building Engineering</div>
+        <div>May 2026</div>
+    </footer>
+
+</body>
+</html>

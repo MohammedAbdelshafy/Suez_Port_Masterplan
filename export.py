@@ -107,20 +107,29 @@ def export_boq(cfg: Config) -> None:
     land_area = polygon_area(rectangle(*_xywh(lay.land_bounds)))
     quay_len = sum(p.h for p in cfg.parcels if p.has_quay)
     total_berths = sum(p.berths for p in cfg.parcels)
+    eco = cfg.parcel("ECOSYSTEM")
 
     rows = [
         ("Dredging (channel + basin)", "m3", round(dredge_vol, 0)),
         ("Navigation channel area", "m2", round(channel_area, 0)),
         ("Turning basin area", "m2", round(basin_area, 0)),
+        ("Tug basin area", "m2", round(180.0 * 200.0, 0)),
+        ("Anchorage area", "m2", round(800.0 * 600.0, 0)),
         ("Reclaimed land area", "m2", round(land_area, 0)),
         ("Quay wall length (total)", "m", round(quay_len, 0)),
         ("Berths (count)", "no", total_berths),
-        ("Breakwater length (2 arms)", "m", 2 * 700),
+        ("Breakwater length (2 arms)", "m", round(cfg.bw.north_length + cfg.bw.south_length, 0)),
+        ("Navigation lights", "no", 2),
         ("Storage tanks", "no", t.count),
         ("Tank diameter", "m", t.diameter),
         ("Silos", "no", s.count),
         ("Silo diameter", "m", s.diameter),
         ("Armour stone unit (Hudson W50)", "t", round(hudson_armour_mass(cfg.bw), 1)),
+        ("Admin building footprint", "m2", round(260.0 * 180.0, 0)),
+        ("Fire station footprint", "m2", round(160.0 * 140.0, 0)),
+        ("Mosque & amenities footprint", "m2", round(140.0 * 120.0, 0)),
+        ("Ecosystem / greenspace area", "m2", round(eco.w * eco.h, 0)),
+        ("Roundabouts", "no", 2),
     ]
     with open(cfg.paths.boq, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
@@ -144,6 +153,19 @@ def export_engineering_report(cfg: Config, checks) -> None:
     v = cfg.vessel
     n = cfg.nav
     w50 = hudson_armour_mass(cfg.bw)
+    # Compute container block count for the report.
+    cp = cfg.parcel("CONTAINER")
+    apron = cfg.roads.quay_apron_setback
+    inner_w = cp.w - apron - 90
+    yard_h = cp.h * 0.6
+    block_h_unit = 30.0
+    block_spacing = 55.0
+    n_blocks = 0
+    by = 30.0
+    while by + block_h_unit < yard_h - 30:
+        n_blocks += 1
+        by += block_spacing
+
     lines = [
         f"# {pj.title}",
         "",
@@ -188,11 +210,32 @@ def export_engineering_report(cfg: Config, checks) -> None:
         f"| **Median armour mass W50** | **{w50:.1f} t** |",
         f"| Crest level | +{cfg.bw.crest_level:.1f} m CD |",
         "",
+        "## 3a. Navigation Aids & Operations",
+        "",
+        "| Feature | Description |",
+        "|---|---|",
+        "| North breakwater light | FL.G 5s (green, starboard — IALA Region A) |",
+        "| South breakwater light | FL.R 5s (red, port — IALA Region A) |",
+        "| Pilot boarding station | 400 m seaward of channel mouth |",
+        "| Tug basin | 180×200 m service craft basin adjacent to turning basin |",
+        f"| Anchorage area | 800×600 m designated anchorage NW of channel |",
+        "",
         "## 4. Storage",
         "",
         f"- Liquid bulk: **{cfg.tanks.count} tanks**, Ø{cfg.tanks.diameter:.0f} m, "
         f"{cfg.tanks.diameter * cfg.tanks.spacing_factor:.0f} m centres, bunded.",
         f"- Dry bulk: **{cfg.silos.count} silos**, Ø{cfg.silos.diameter:.0f} m.",
+        f"- Container yard: **{n_blocks} stacking blocks** in the container terminal.",
+        "",
+        "## 4a. Port Facilities",
+        "",
+        "| Facility | Description |",
+        "|---|---|",
+        "| Port Authority / Admin Building | 260×180 m building near main gate |",
+        "| Fire Station | 160×140 m emergency response facility near oil terminal |",
+        "| Mosque & Amenities | 140×120 m staff welfare facility in ecosystem zone |",
+        f"| Ecosystem Zone / Greenspace | {cfg.parcel('ECOSYSTEM').w:.0f}×"
+        f"{cfg.parcel('ECOSYSTEM').h:.0f} m landscaped buffer with stormwater retention |",
         "",
         "## 5. Engineering Assumptions",
         "",
@@ -205,6 +248,8 @@ def export_engineering_report(cfg: Config, checks) -> None:
         "- Breakwater armour sized by Hudson with Kd for rough quarry stone, "
         "breaking waves, trunk section.",
         "- Tank spacing follows a 1.5·diameter fire-separation rule of thumb.",
+        "- Navigation lights follow IALA Maritime Buoyage System Region A.",
+        "- Berth length validated at ≥ 1.1·LOA per PIANC mooring guidelines.",
         "",
         "## 6. Validation Results",
         "",
@@ -242,3 +287,4 @@ def export_all(doc, cfg: Config, checks) -> list[str]:
     export_engineering_report(cfg, checks)
     rendered = export_renders(doc, cfg)
     return rendered
+
