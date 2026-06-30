@@ -1,0 +1,24 @@
+SUEZ PORT MASTERPLAN -- LAYER REPORT
+============================================================
+LAYER            COLOR   LW(1/100mm)    LINETYPE   TRANSP  DESCRIPTION
+BOUNDARY             7            50  CONTINUOUS       0%  Port / site boundary
+LAND                42            18  CONTINUOUS       0%  Reclaimed land area
+WATER              140            18  CONTINUOUS      55%  Harbour & sea water
+BREAKWATER          32            50  CONTINUOUS       0%  Rubble-mound breakwaters
+CHANNEL            150            25  CONTINUOUS      30%  Navigation channel
+TURNING_BASIN      151            25  CONTINUOUS      30%  Turning basin
+BERTHS              30            35  CONTINUOUS       0%  Berth faces
+QUAYS               33            50  CONTINUOUS       0%  Quay walls / aprons
+TERMINALS            8            25  CONTINUOUS       0%  Terminal parcels
+ROADS                9            20  CONTINUOUS       0%  Internal road network
+TANKS               20            35  CONTINUOUS       0%  Liquid bulk tanks
+SILOS               40            35  CONTINUOUS       0%  Dry bulk silos
+DIMENSIONS           1            18  CONTINUOUS       0%  Dimension lines
+CENTERLINES          4            13     CENTER2       0%  Centrelines
+TEXT                 7            18  CONTINUOUS       0%  General annotation text
+HATCH              250            13  CONTINUOUS      65%  Fill hatching
+GRID                 8             9     DASHED2      80%  Coordinate grid
+LEGEND               7            18  CONTINUOUS       0%  Legend block
+TITLEBLOCK           7            50  CONTINUOUS       0%  Title block & border
+============================================================
+Total layers: 19

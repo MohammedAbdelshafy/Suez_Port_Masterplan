@@ -1,0 +1,56 @@
+{
+  "project": {
+    "title": "SUEZ PORT MASTERPLAN DESIGN",
+    "author": "Coastal Structures Studio (CSS v1.0)",
+    "student": "Mohamed Abdelshafy",
+    "student_id": "20107979",
+    "course": "ECB 3802",
+    "supervisor": "Dr. Walid Al-Amri"
+  },
+  "design_vessel": {
+    "class": "Panamax bulk carrier",
+    "Lmax_m": 250.0,
+    "bmax_m": 32.0,
+    "dmax_m": 12.0,
+    "Cb": 0.85,
+    "speed_kn": 6.0,
+    "dwt_t": 75000.0
+  },
+  "navigation": {
+    "channel_length_m": 2000.0,
+    "channel_width_m": 224.0,
+    "channel_depth_m": 13.41,
+    "berth_pocket_depth_m": 12.84,
+    "turning_basin_diameter_m": 375.0,
+    "turning_basin_radius_m": 187.5,
+    "turning_basin_area_ha": 11.04,
+    "channel_bend_radius_m": 1500.0,
+    "squat_m": 0.306,
+    "ukc_m": 0.6,
+    "stopping_distance_m": 1750.0,
+    "anchorage_radius_m": 360.5,
+    "anchorage_area_ha": 40.82
+  },
+  "terminals": {
+    "container_quay_m": 850.0,
+    "general_cargo_quay_m": 575.0,
+    "oil_quay_m": 575.0,
+    "passenger_quay_m": 300.0,
+    "roro_quay_m": 300.0,
+    "total_berths": 9,
+    "tanks": {
+      "count": 5,
+      "diameter_m": 30.0,
+      "spacing_m": 45.0
+    },
+    "silos": {
+      "count": 10,
+      "diameter_m": 10.0
+    }
+  },
+  "breakwater": {
+    "hudson_w50_t": 7.58,
+    "crest_level_m_cd": 7.0,
+    "design_wave_hs_m": 4.5
+  }
+}
