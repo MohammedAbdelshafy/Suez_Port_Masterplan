@@ -1,8 +1,6 @@
-# Suez Port Masterplan — Parametric CAD Generator
+# Suez Port Masterplan
 
-Engineering-grade, **fully parametric** CAD model of Suez Port, generated
-programmatically with [`ezdxf`](https://ezdxf.mozman.at/). Nothing is traced
-or hand-drawn — every line is computed from engineering inputs.
+A concept-level CAD model of Suez Port generated from the project's engineering inputs. It exports a DXF drawing, rendered views, a bill of quantities and a report that records the assumptions. The output is for study and review, not construction.
 
 | | |
 |---|---|
